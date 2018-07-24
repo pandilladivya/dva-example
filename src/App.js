@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'dva'
 import { routerRedux } from 'dva/router'
 
-import Tour from 'reactour'
 import _ from 'lodash'
 import {style} from './style'
 import './style.css'
@@ -12,9 +11,6 @@ class App extends Component {
     super(props)
     this.state = {
       shapesArray: this.props.shapes,
-      tourType: this.props.tour.tourType,
-      isTourOpen: this.props.tour.status,
-      steps: this.props.tour.steps,
       color: 'black',
       shapeType: 'square',
       counter: this.props.counter
@@ -25,9 +21,6 @@ class App extends Component {
   componentWillReceiveProps (nextProps) {
     this.setState({shapesArray: nextProps.shapes})
     this.setState({counter: nextProps.counter})
-    this.setState({isTourOpen: nextProps.tour.status})
-    this.setState({tourType: nextProps.tour.tourType})
-    this.setState({steps: nextProps.tour.steps})
   }
 
   renderShapes (shapes, values) {
@@ -81,7 +74,6 @@ class App extends Component {
   render () {
     var values = _.countBy(this.state.counter)
 
-    const accentColor = '#5cb7b7'
     return (
       <div>
         <div style={{flexDirection: 'column', display: 'flex', float: 'right'}}>
@@ -115,16 +107,7 @@ class App extends Component {
           {this.renderShapes(this.state.shapesArray, values)}
 
         </div>
-        <Tour
-          onRequestClose={() => { this.props.dispatch({type: 'tour/changeTourStatus'}) }}
-          steps={this.state.steps}
-          isOpen={this.state.isTourOpen}
-          maskClassName='mask'
-          maskSpace='10'
-          className='helper'
-          rounded={5}
-          accentColor={accentColor}
-        />
+
       </div>
     )
   }
