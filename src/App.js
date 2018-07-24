@@ -14,12 +14,12 @@ class App extends Component {
       shapesArray: this.props.shapes,
       tourType: this.props.tour.tourType,
       isTourOpen: this.props.tour.status,
+      steps: this.props.tour.steps,
       color: 'black',
       shapeType: 'square',
       counter: this.props.counter
     }
     this.renderShapes = this.renderShapes.bind(this)
-    this.getTourConfig = this.getTourConfig.bind(this)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -27,6 +27,7 @@ class App extends Component {
     this.setState({counter: nextProps.counter})
     this.setState({isTourOpen: nextProps.tour.status})
     this.setState({tourType: nextProps.tour.tourType})
+    this.setState({steps: nextProps.tour.steps})
   }
 
   renderShapes (shapes, values) {
@@ -77,68 +78,16 @@ class App extends Component {
     </div>
   }
 
-  getTourConfig (type) {
-    if (type === 'demo') {
-      return [
-        {
-          selector: '[data-tut="shape"]',
-          position: 'right',
-          content: `Choose Shape which you want to add`
-        },
-        {
-          selector: '[data-tut="color"]',
-          position: 'right',
-          content: `Enter color which you want to fill inside the shape`
-        },
-        {
-          selector: '[data-tut="add-shape"]',
-          position: 'right',
-          content: ({goTo}) => <div>New shape is added when this button is clicked, based on above selected properties</div>
-        },
-        {
-          selector: '[data-tut="remove-shape"]',
-          position: 'left',
-          content: ({ goTo }) =>
-            <div>
-        If you want to remove recently added shape, click this
-
-            </div>
-        }
-      ]
-    } else if (type === 'add') {
-      return [
-        {
-          selector: '[data-tut="add-shape"]',
-          position: 'right',
-          content: ({goTo}) => <div>
-            New shape is added when this button is clicked, based on above selected properties
-          </div>
-        }
-      ]
-    } else if (type === 'remove') {
-      return [
-        {
-          selector: '[data-tut="remove-shape"]',
-          position: 'left',
-          content: ({goTo}) => <div>
-          Recently Created shape is removed, when this button is clicked.
-          </div>
-        }
-      ]
-    }
-  }
-
   render () {
     var values = _.countBy(this.state.counter)
 
-    const tourConfig = this.getTourConfig(this.state.tourType)
     const accentColor = '#5cb7b7'
     return (
       <div>
         <div style={{flexDirection: 'column', display: 'flex', float: 'right'}}>
           <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'demo'}) }} style={{cursor: 'pointer'}}><u>Basic App Intro</u></a>
-          <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'add'}); this.props.dispatch({type: 'shapes/add', color: this.state.color, shapeType: this.state.shapeType}) }} style={{cursor: 'pointer'}}><u>How to add a shape?</u></a>
-          <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'remove'}); this.props.dispatch({type: 'shapes/remove'}) }} style={{cursor: 'pointer'}}><u>How to remove a shape?</u></a>
+          <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'add'}) }} style={{cursor: 'pointer'}}><u>How to add a shape?</u></a>
+          <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'remove'}) }} style={{cursor: 'pointer'}}><u>How to remove a shape?</u></a>
         </div>
         <div style={style.containerStyle}>
           <select style={style.elementStyle} data-tut='shape' value={this.state.shapeType} onChange={(event) => { this.setState({shapeType: event.target.value}) }}>
@@ -165,7 +114,7 @@ class App extends Component {
         </div>
         <Tour
           onRequestClose={() => { this.props.dispatch({type: 'tour/changeTourStatus'}) }}
-          steps={tourConfig}
+          steps={this.state.steps}
           isOpen={this.state.isTourOpen}
           maskClassName='mask'
           maskSpace='10'
