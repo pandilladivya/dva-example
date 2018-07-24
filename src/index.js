@@ -1,4 +1,3 @@
-
 import dva from 'dva'
 
 import shapesModel from './models/shapes'

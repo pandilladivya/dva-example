@@ -23,6 +23,25 @@ export const data = {
       content: 'Recently Created shape is removed, when this button is clicked.'
     }
   ],
+  singleShape: [
+    {
+      selector: '[tour-ref="single-shape"]',
+      position: 'left',
+      content: 'Single Click to Increment Counter'
+    }
+  ],
+  shapeDetails: [
+    {
+      selector: '[tour-ref="shape-details"]',
+      position: 'left',
+      content: 'Displays the shape you have selected'
+    },
+    {
+      selector: '[tour-ref="shape-info"]',
+      position: 'left',
+      content: 'Shape Information'
+    }
+  ],
   demo: [
     {
       selector: '[tour-ref="shape"]',

@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
+import { connect } from 'dva'
 import './style.css'
 
 class Shape extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      shape: this.props.location.shape
+      shape: this.props.location.shape,
+      counter: this.props.location.counter
     }
+  }
+
+  componentWillMount () {
+    this.props.dispatch({type: 'tour/changeTour', tourType: 'shapeDetails'})
   }
 
   render () {
@@ -43,9 +49,18 @@ class Shape extends Component {
     }
 
     return (
-      <div style={shapeStyling} />
+      <div>
+        <div tour-ref='shape-details' style={shapeStyling} />
+        <div tour-ref='shape-info'>
+          <h5>Type: {shape.shapeType}</h5>
+          <h5>Color: {shape.color}</h5>
+          <h5>Number of times {shape.shapeType} is clicked: {this.state.counter}</h5>
+        </div>
+      </div>
     )
   }
 }
 
-export default Shape
+export default connect(({ tour }) => ({
+  tour: tour
+}))(Shape)

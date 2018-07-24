@@ -63,12 +63,12 @@ class App extends Component {
           }
             break
         }
-        return <div
+        return <div tour-ref='single-shape'
           onClick={() => {
             this.props.dispatch({type: 'counter/shapeCounter', shape: shapeType})
           }}
           onDoubleClick={() => {
-            this.props.dispatch(routerRedux.push({pathname: '/shape', shape: shape}))
+            this.props.dispatch(routerRedux.push({pathname: '/shape', shape: shape, counter: values[shapeType]}))
           }}
           style={shapeStyling} >
           <div style={shapeType === 'triangle' ? {marginTop: 10, marginLeft: -2} : {}}>{values[shapeType]}</div>
@@ -88,6 +88,9 @@ class App extends Component {
           <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'demo'}) }} style={{cursor: 'pointer'}}><u>Basic App Intro</u></a>
           <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'add'}) }} style={{cursor: 'pointer'}}><u>How to add a shape?</u></a>
           <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'remove'}) }} style={{cursor: 'pointer'}}><u>How to remove a shape?</u></a>
+          <a onClick={() => {
+            if (this.state.shapesArray.length > 0) { this.props.dispatch({type: 'tour/changeTour', tourType: 'singleShape'}) } else { alert('Please Add Atleast one shape to know more about shape') }
+          }} style={{cursor: 'pointer'}}><u>About each shape?</u></a>
         </div>
         <div style={style.containerStyle}>
           <select style={style.elementStyle} tour-ref='shape' value={this.state.shapeType} onChange={(event) => { this.setState({shapeType: event.target.value}) }}>
