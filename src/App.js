@@ -21,12 +21,13 @@ class App extends Component {
   }
 
   componentWillMount () {
-    this.setState({isTourOpen: true})
+    this.setState({isTourOpen: this.props.tourStatus})
   }
 
   componentWillReceiveProps (nextProps) {
     this.setState({shapesArray: nextProps.shapes})
     this.setState({counter: nextProps.counter})
+    this.setState({isTourOpen: nextProps.tourStatus})
   }
 
   renderShapes (shapes, values) {
@@ -106,7 +107,7 @@ class App extends Component {
 
         </div>
         <Tour
-          onRequestClose={() => { this.setState({isTourOpen: false}) }}
+          onRequestClose={() => { this.props.dispatch({type: 'tourStatus/changeTourStatus'}) }}
           steps={tourConfig}
           isOpen={this.state.isTourOpen}
           maskClassName='mask'
@@ -147,7 +148,8 @@ const tourConfig = [
   }
 ]
 
-export default connect(({ shapes, counter }) => ({
+export default connect(({ shapes, counter, tourStatus }) => ({
   shapes: shapes,
-  counter: counter
+  counter: counter,
+  tourStatus: tourStatus
 }))(App)
