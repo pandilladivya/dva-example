@@ -90,14 +90,14 @@ class App extends Component {
           <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'remove'}) }} style={{cursor: 'pointer'}}><u>How to remove a shape?</u></a>
         </div>
         <div style={style.containerStyle}>
-          <select style={style.elementStyle} data-tut='shape' value={this.state.shapeType} onChange={(event) => { this.setState({shapeType: event.target.value}) }}>
+          <select style={style.elementStyle} tour-ref='shape' value={this.state.shapeType} onChange={(event) => { this.setState({shapeType: event.target.value}) }}>
             <option value='rectangle'>Rectangle</option>
             <option value='circle'>Circle</option>
             <option value='square'>Sqaure</option>
             <option value='triangle'>Triangle</option>
           </select>
 
-          <select style={style.elementStyle} data-tut='color' value={this.state.color} onChange={(event) => { this.setState({color: event.target.value}) }}>
+          <select style={style.elementStyle} tour-ref='color' value={this.state.color} onChange={(event) => { this.setState({color: event.target.value}) }}>
             <option value='blue'>Blue</option>
             <option value='black'>Black</option>
             <option value='red'>Red</option>
@@ -106,8 +106,8 @@ class App extends Component {
             <option value='purple'>Purple</option>
           </select>
 
-          <button style={style.elementStyle} data-tut='add-shape' key='addShape' onClick={() => { this.props.dispatch({type: 'shapes/add', color: this.state.color, shapeType: this.state.shapeType}) }}>Add Shape</button>
-          <button style={style.elementStyle} key='removeShape' data-tut='remove-shape' onClick={() => { this.props.dispatch({type: 'shapes/remove'}) }}>Remove Shape</button>
+          <button style={style.elementStyle} tour-ref='add-shape' key='addShape' onClick={() => { this.props.dispatch({type: 'shapes/add', color: this.state.color, shapeType: this.state.shapeType}) }}>Add Shape</button>
+          <button style={style.elementStyle} key='removeShape' tour-ref='remove-shape' onClick={() => { this.props.dispatch({type: 'shapes/remove'}) }}>Remove Shape</button>
 
           {this.renderShapes(this.state.shapesArray, values)}
 
