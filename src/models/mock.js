@@ -28,6 +28,11 @@ export const data = {
       selector: '[tour-ref="single-shape"]',
       position: 'left',
       content: 'Single Click to Increment Counter'
+    },
+    {
+      selector: '[tour-ref="single-shape"]',
+      position: 'left',
+      content: 'Double Click to show info about shape'
     }
   ],
   shapeDetails: [

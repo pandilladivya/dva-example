@@ -14,6 +14,13 @@ export default {
         steps: state.steps
       })
     },
+    clearTour (state) {
+      return Object.assign({}, state, {
+        tourType: '',
+        status: false,
+        steps: []
+      })
+    },
     changeTour  (state, action) {
       return Object.assign({}, state, {
         tourType: action.tourType, status: true, steps: data[action.tourType]

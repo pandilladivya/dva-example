@@ -5,15 +5,26 @@ import Tour from 'reactour'
 
 import App from './App'
 import Shape from './shape'
+import SideMenu from './menu'
 
 const { ConnectedRouter } = routerRedux
 class RouterConfig extends Component {
   render () {
     const accentColor = '#5cb7b7'
     const {history, tour, dispatch} = this.props
+    var steps = []
+    if (history.location.pathname !== '/') {
+      steps.push({
+        selector: '[tour-ref="home-page"]',
+        position: 'left',
+        content: 'Go to Home Page to continue'
+      })
+    }
+    steps.push(...tour.steps)
 
     return (
       <div>
+        <SideMenu />
         <ConnectedRouter history={history}>
           <Switch>
             <Route path='/' exact component={App} />
@@ -22,7 +33,7 @@ class RouterConfig extends Component {
         </ConnectedRouter>
         <Tour
           onRequestClose={() => { dispatch({type: 'tour/changeTourStatus'}) }}
-          steps={tour.steps}
+          steps={steps}
           isOpen={tour.status}
           maskClassName='mask'
           maskSpace='10'
@@ -35,6 +46,7 @@ class RouterConfig extends Component {
   }
 }
 
-export default connect(({ tour }) => ({
-  tour
+export default connect(({ tour, shapes }) => ({
+  tour,
+  shapes
 }))(RouterConfig)

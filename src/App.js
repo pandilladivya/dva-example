@@ -53,17 +53,6 @@ class App extends Component {
     var values = _.countBy(this.state.counter)
     return (
       <div>
-        <div style={{flexDirection: 'column', display: 'flex', float: 'right'}}>
-          <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'demo'}) }}><u>Basic App Intro</u></a>
-          <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'add'}) }}><u>How to add a shape?</u></a>
-          <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'remove'}) }}><u>How to remove a shape?</u></a>
-          <a onClick={() => {
-            if (this.state.shapesArray.length > 0) { this.props.dispatch({type: 'tour/changeTour', tourType: 'singleShape'}) } else { alert('Please Add Atleast one shape to know more about shape') }
-          }} style={{cursor: 'pointer'}}>
-            <u>About each shape?</u>
-          </a>
-        </div>
-
         <div style={style.containerStyle}>
           <select style={style.elementStyle} tour-ref='shape' value={this.state.shapeType} onChange={(event) => { this.setState({shapeType: event.target.value}) }}>
             {['Rectangle', 'Circle', 'Sqaure', 'Triangle'].map((shape) => <option value={shape.toLowerCase()}>{shape}</option>)}

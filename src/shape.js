@@ -14,7 +14,7 @@ class Shape extends Component {
   }
 
   componentWillMount () {
-    this.props.dispatch({type: 'tour/changeTour', tourType: 'shapeDetails'})
+    this.props.dispatch({type: 'tour/clearTour'})
   }
 
   render () {
@@ -39,5 +39,5 @@ class Shape extends Component {
 }
 
 export default connect(({ tour }) => ({
-  tour: tour
+  tour
 }))(Shape)
