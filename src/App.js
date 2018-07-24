@@ -12,22 +12,21 @@ class App extends Component {
     super(props)
     this.state = {
       shapesArray: this.props.shapes,
-      isTourOpen: false,
+      tourType: this.props.tour.tourType,
+      isTourOpen: this.props.tour.status,
       color: 'black',
       shapeType: 'square',
       counter: this.props.counter
     }
     this.renderShapes = this.renderShapes.bind(this)
-  }
-
-  componentWillMount () {
-    this.setState({isTourOpen: this.props.tourStatus})
+    this.getTourConfig = this.getTourConfig.bind(this)
   }
 
   componentWillReceiveProps (nextProps) {
     this.setState({shapesArray: nextProps.shapes})
     this.setState({counter: nextProps.counter})
-    this.setState({isTourOpen: nextProps.tourStatus})
+    this.setState({isTourOpen: nextProps.tour.status})
+    this.setState({tourType: nextProps.tour.tourType})
   }
 
   renderShapes (shapes, values) {
@@ -78,11 +77,69 @@ class App extends Component {
     </div>
   }
 
+  getTourConfig (type) {
+    if (type === 'demo') {
+      return [
+        {
+          selector: '[data-tut="shape"]',
+          position: 'right',
+          content: `Choose Shape which you want to add`
+        },
+        {
+          selector: '[data-tut="color"]',
+          position: 'right',
+          content: `Enter color which you want to fill inside the shape`
+        },
+        {
+          selector: '[data-tut="add-shape"]',
+          position: 'right',
+          content: ({goTo}) => <div>New shape is added when this button is clicked, based on above selected properties</div>
+        },
+        {
+          selector: '[data-tut="remove-shape"]',
+          position: 'left',
+          content: ({ goTo }) =>
+            <div>
+        If you want to remove recently added shape, click this
+
+            </div>
+        }
+      ]
+    } else if (type === 'add') {
+      return [
+        {
+          selector: '[data-tut="add-shape"]',
+          position: 'right',
+          content: ({goTo}) => <div>
+            New shape is added when this button is clicked, based on above selected properties
+          </div>
+        }
+      ]
+    } else if (type === 'remove') {
+      return [
+        {
+          selector: '[data-tut="remove-shape"]',
+          position: 'left',
+          content: ({goTo}) => <div>
+          Recently Created shape is removed, when this button is clicked.
+          </div>
+        }
+      ]
+    }
+  }
+
   render () {
     var values = _.countBy(this.state.counter)
+
+    const tourConfig = this.getTourConfig(this.state.tourType)
     const accentColor = '#5cb7b7'
     return (
       <div>
+        <div style={{flexDirection: 'column', display: 'flex', float: 'right'}}>
+          <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'demo'}) }} style={{cursor: 'pointer'}}><u>Basic App Intro</u></a>
+          <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'add'}); this.props.dispatch({type: 'shapes/add', color: this.state.color, shapeType: this.state.shapeType}) }} style={{cursor: 'pointer'}}><u>How to add a shape?</u></a>
+          <a onClick={() => { this.props.dispatch({type: 'tour/changeTour', tourType: 'remove'}); this.props.dispatch({type: 'shapes/remove'}) }} style={{cursor: 'pointer'}}><u>How to remove a shape?</u></a>
+        </div>
         <div style={style.containerStyle}>
           <select style={style.elementStyle} data-tut='shape' value={this.state.shapeType} onChange={(event) => { this.setState({shapeType: event.target.value}) }}>
             <option value='rectangle'>Rectangle</option>
@@ -107,7 +164,7 @@ class App extends Component {
 
         </div>
         <Tour
-          onRequestClose={() => { this.props.dispatch({type: 'tourStatus/changeTourStatus'}) }}
+          onRequestClose={() => { this.props.dispatch({type: 'tour/changeTourStatus'}) }}
           steps={tourConfig}
           isOpen={this.state.isTourOpen}
           maskClassName='mask'
@@ -121,35 +178,8 @@ class App extends Component {
   }
 }
 
-const tourConfig = [
-  {
-    selector: '[data-tut="shape"]',
-    position: 'right',
-    content: `Choose Shape which you want to add`
-  },
-  {
-    selector: '[data-tut="color"]',
-    position: 'right',
-    content: `Enter color which you want to fill inside the shape`
-  },
-  {
-    selector: '[data-tut="add-shape"]',
-    position: 'right',
-    content: `You can Add shape by clicking this button`
-  },
-  {
-    selector: '[data-tut="remove-shape"]',
-    position: 'left',
-    content: ({ goTo }) =>
-      <div>
-       If you want to remove recently added shape, click this
-
-      </div>
-  }
-]
-
-export default connect(({ shapes, counter, tourStatus }) => ({
+export default connect(({ shapes, counter, tour }) => ({
   shapes: shapes,
   counter: counter,
-  tourStatus: tourStatus
+  tour: tour
 }))(App)
