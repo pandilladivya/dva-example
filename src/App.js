@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'dva'
 import { routerRedux } from 'dva/router'
 
+import Tour from 'reactour'
 import _ from 'lodash'
+import {style} from './style'
 import './style.css'
 
 class App extends Component {
@@ -10,11 +12,16 @@ class App extends Component {
     super(props)
     this.state = {
       shapesArray: this.props.shapes,
+      isTourOpen: false,
       color: 'black',
       shapeType: 'square',
       counter: this.props.counter
     }
     this.renderShapes = this.renderShapes.bind(this)
+  }
+
+  componentWillMount () {
+    this.setState({isTourOpen: true})
   }
 
   componentWillReceiveProps (nextProps) {
@@ -72,27 +79,73 @@ class App extends Component {
 
   render () {
     var values = _.countBy(this.state.counter)
+    const accentColor = '#5cb7b7'
     return (
       <div>
-        <select value={this.state.shapeType} onChange={(event) => { this.setState({shapeType: event.target.value}) }}>
-          <option value='rectangle'>Rectangle</option>
-          <option value='circle'>Circle</option>
-          <option value='square'>Sqaure</option>
-          <option value='triangle'>Triangle</option>
-        </select>
+        <div style={style.containerStyle}>
+          <select style={style.elementStyle} data-tut='shape' value={this.state.shapeType} onChange={(event) => { this.setState({shapeType: event.target.value}) }}>
+            <option value='rectangle'>Rectangle</option>
+            <option value='circle'>Circle</option>
+            <option value='square'>Sqaure</option>
+            <option value='triangle'>Triangle</option>
+          </select>
 
-        <input value={this.state.color} label='Enter Color' placeholder='Choose Color' onChange={(event) => {
-          this.setState({color: event.target.value})
-        }} />
-        <button key='addShape' onClick={() => { this.props.dispatch({type: 'shapes/add', color: this.state.color, shapeType: this.state.shapeType}) }}>Add Shape</button>
-        <button key='removeShape' onClick={() => { this.props.dispatch({type: 'shapes/remove'}) }}>Remove Shape</button>
+          <select style={style.elementStyle} data-tut='color' value={this.state.color} onChange={(event) => { this.setState({color: event.target.value}) }}>
+            <option value='blue'>Blue</option>
+            <option value='black'>Black</option>
+            <option value='red'>Red</option>
+            <option value='green'>Green</option>
+            <option value='orange'>Orange</option>
+            <option value='purple'>Purple</option>
+          </select>
 
-        {this.renderShapes(this.state.shapesArray, values)}
+          <button style={style.elementStyle} data-tut='add-shape' key='addShape' onClick={() => { this.props.dispatch({type: 'shapes/add', color: this.state.color, shapeType: this.state.shapeType}) }}>Add Shape</button>
+          <button style={style.elementStyle} key='removeShape' data-tut='remove-shape' onClick={() => { this.props.dispatch({type: 'shapes/remove'}) }}>Remove Shape</button>
 
+          {this.renderShapes(this.state.shapesArray, values)}
+
+        </div>
+        <Tour
+          onRequestClose={() => { this.setState({isTourOpen: false}) }}
+          steps={tourConfig}
+          isOpen={this.state.isTourOpen}
+          maskClassName='mask'
+          maskSpace='10'
+          className='helper'
+          rounded={5}
+          accentColor={accentColor}
+        />
       </div>
     )
   }
 }
+
+const tourConfig = [
+  {
+    selector: '[data-tut="shape"]',
+    position: 'right',
+    content: `Choose Shape which you want to add`
+  },
+  {
+    selector: '[data-tut="color"]',
+    position: 'right',
+    content: `Enter color which you want to fill inside the shape`
+  },
+  {
+    selector: '[data-tut="add-shape"]',
+    position: 'right',
+    content: `You can Add shape by clicking this button`
+  },
+  {
+    selector: '[data-tut="remove-shape"]',
+    position: 'left',
+    content: ({ goTo }) =>
+      <div>
+       If you want to remove recently added shape, click this
+
+      </div>
+  }
+]
 
 export default connect(({ shapes, counter }) => ({
   shapes: shapes,
