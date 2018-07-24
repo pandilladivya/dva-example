@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
-import { routerRedux, Route, Switch } from 'dva/router'
 import { connect } from 'dva'
+import { routerRedux, Route, Switch } from 'dva/router'
 import Tour from 'reactour'
+
 import App from './App'
 import Shape from './shape'
 
@@ -35,5 +36,5 @@ class RouterConfig extends Component {
 }
 
 export default connect(({ tour }) => ({
-  tour: tour
+  tour
 }))(RouterConfig)

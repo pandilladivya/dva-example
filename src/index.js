@@ -4,7 +4,9 @@ import dva from 'dva'
 import shapesModel from './models/shapes'
 import counterModel from './models/counter'
 import tour from './models/tour'
+
 import Router from './router'
+
 import './style.css'
 
 const app = dva()
